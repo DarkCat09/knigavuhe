@@ -1,0 +1,34 @@
+---
+cover = head/meta[@property="og:image"]/@content [0]
+***ID*** = re.search(r'knigavuhe.org/2/covers/(\d+)/', cover)
+
+---
+pagetitle = //div[@class="page_title"]/h1 [0]
+
+#booktitle = //span[@class="book_title_elem book_title_name"] [0].text_content()
+booktitle = //span[@itemprop="name"] [0].text_content()
+
+bookauthor = //span[@itemprop="author"]/a [0].text_content()
+
+---
+cover = //div[@class="book_cover_wrap"]/div[@class="book_cover"]/img/@src [0]
+
+#description = //div[@class="book_description"] [0].text_content()
+description = //div[@itemprop="description"] [0].text_content()
+
+---
+lst = //div[@class="gm-scroll-view"]/div[@class="book_playlist_item"]
+for i in lst:
+***PART*** = /div[@class="book_playlist_item_name --text-overflow"] [0].text_content()
+
+---
+https://s10.knigavuhe.org/3/audio/***ID***/***PART***.mp3
+
+---
+POST https://knigavuhe.org/play/id/20977/progress/
+trackIndex: 3 (part number in a playlist, from 0)
+position: 1074.834395 (can be integer or float, from the beginning of part, in seconds)
+speed: 1 (can be integer or float, from 0.5 to 3)
+JSON response:
+0: "flood" /* = pause */ or null /* = playing */
+1: null /* = pause */ or 1 /* = playing */
